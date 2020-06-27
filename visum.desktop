@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Visum
+Encoding=UTF-8
+Path=/usr/share/visum
+Exec=bash scripts/visum.sh %f
+Icon=/usr/share/visum/media/visum_logo.svg
+Comment=In-browser Office files viewer for Linux.
+MimeType=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.presentationml.presentation
+Terminal=false
+Categories=Office;
