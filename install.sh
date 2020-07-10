@@ -22,8 +22,13 @@ done
 echo -e "${GREEN}Dependencies satisfied.${ENDCOLOR_NORMAL}"
 
 sudo rm -rf /usr/share/visum
-sudo git clone https://github.com/VladimirMikulic/visum.git /usr/share/visum
-sudo cp /usr/share/visum/visum.desktop /usr/share/applications/visum.desktop
+
+sudo mkdir /usr/share/visum
+git clone https://github.com/VladimirMikulic/visum.git
+
+sudo cp -r ./visum/scripts /usr/share/visum
+sudo cp -r ./visum/media /usr/share/visum
+sudo cp ./visum/visum.desktop /usr/share/applications/visum.desktop
 
 rm -rf ~/.config/visum
 mkdir ~/.config/visum

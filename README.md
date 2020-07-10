@@ -35,6 +35,9 @@ Visum is different because it uses Microsoft Office Online version to display yo
 
 ## :package: Installation
 
+> ⚠️ Before installing Visum, make sure that you have public SSH key.
+To generate one, visit [this](https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key) link.
+
 Install Visum by running these commands:
 
 ```sh
@@ -76,6 +79,18 @@ That's it! Now you can view Office files in your browser! 🎉
 Watch Visum in action! The full demo video can be found [here](https://youtu.be/tKexhL8MoGI).
 
 ![Visum Excel](./media/visum_promo_excel.gif)
+
+## 🏔️ CLI
+
+You can use Visum in CLI by adding this code to your `.bashrc`/`.zshrc` file:
+
+```shell
+visum() {
+  bash /usr/share/visum/scripts/visum.sh $1 > /dev/null 2>&1
+}
+```
+
+Now, you can run `visum <office_file_path>` and the file will be opened!
 
 ## :sparkles: Run tests
 
