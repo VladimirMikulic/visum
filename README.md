@@ -15,11 +15,21 @@ In-browser Office files viewer for Linux.
 
 **Visum was created to solve the problem of viewing office files on Linux the right way.**
 
-The problem with Microsoft Office alternatives for Linux is that they are unusable for various reasons. Libre Office has a dreaded design from the 90s, WPS needs font patching, installations result in unresolved dependencies, partial Windows Office files compatibility, and the list goes on...
+The problem with Microsoft Office alternatives for Linux is that they are
+**unusable** for various reasons. Libre Office has a dreaded design from the
+90s, WPS needs font patching, installations result in unresolved dependencies,
+partial Windows Office files compatibility, and the list goes on...
 
-It's frustrating to install +500Mb office, patch its numerous errors only to find out that it even can't correctly display your document. You switch to another distro, and you go through this again.
+It's frustrating to install +500Mb office, patch its numerous errors only to
+find out that it even can't correctly display your document. You switch to
+another distro, and you go through this again.
 
-Visum is different because it uses Microsoft Office Online version to display your files, so you can be sure that your files are displayed correctly. No more missing text, inverted colours, distorted shapes etc. Visum is very lightweight as well, only 2 scripts and you are good to go! Suitable for everyone, from hobbyist distro hoppers & developers, all the way to students and non-techies.
+Visum is different because it uses Microsoft Office Online version to display
+your files, so you can be sure that your files are **displayed correctly**. No
+more missing text, inverted colours, distorted shapes etc. Visum is very
+lightweight as well, only 2 scripts and you are good to go! Suitable for
+everyone, from hobbyist distro hoppers & developers, all the way to students and
+non-techies.
 
 #### Benefits of using Visum:
 
@@ -76,13 +86,13 @@ That's it! Now you can view Office files in your browser! 🎉
 
 ## :cloud: Usage
 
-Watch Visum in action! The full demo video can be found [here](https://youtu.be/tKexhL8MoGI).
+Watch Visum in action! Simply double-click a file on the desktop!
 
 ![Visum Excel](./media/visum_promo_excel.gif)
 
 ## 🏔️ CLI
 
-You can use Visum in CLI by adding this code to your `.bashrc`/`.zshrc` file:
+You can use Visum in CLI by adding this code to your `~/.bashrc`/`~/.zshrc` file:
 
 ```shell
 visum() {

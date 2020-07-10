@@ -1,5 +1,6 @@
+import pipes
 import base64
-import mimetypes
+import subprocess
 import http.server
 import socketserver
 import os.path as path
@@ -19,7 +20,7 @@ class HttpRequestHandler(http.server.SimpleHTTPRequestHandler):
         filepath = "/" + unquote(parsed_url.path)
         auth_key = dict(parse_qsl(parsed_url.query)).get("key", None)
 
-        authorized_request = auth_key == public_ip and self.is_valid_file(filepath)
+        authorized_request = auth_key == public_ip and self.is_office_file(filepath)
 
         if not authorized_request:
             self.handle_bad_request()
@@ -31,22 +32,15 @@ class HttpRequestHandler(http.server.SimpleHTTPRequestHandler):
         with open(filepath, "rb") as file:
             self.wfile.write(file.read())
 
-    def is_valid_file(self, filepath):
-        file_mimetype = mimetypes.guess_type(filepath)[0]
-        valid_mimetypes = [
-            "office",
-            "msword",
-            "ms-word",
-            "ms-excel",
-            "ms-powerpoint",
-        ]
+    def is_office_file(self, filepath):
+        command = "file " + pipes.quote(filepath)
+        result = subprocess.run(command, stdout=subprocess.PIPE, shell=True).stdout
+        mimetype_list = str(result).lower().split(" ")[1:]
 
-        # If the mimetype is not recognized (None) OR file with specified path doesn't exist
-        if not path.isfile(filepath) or not file_mimetype:
-            return False
+        valid_mimetypes = ["word", "excel", "composite", "microsoft", "powerpoint"]
 
         for mimetype in valid_mimetypes:
-            if mimetype in file_mimetype:
+            if mimetype in mimetype_list:
                 return True
 
         return False

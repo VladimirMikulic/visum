@@ -11,7 +11,7 @@ PUBLIC_IP=`curl icanhazip.com` # ~120ms delay, the fastest website.
 URL_ENCODED_FILEPATH=`python3 -c "import urllib.parse; print(urllib.parse.quote('''$1'''))"`
 
 get_remote_server_url() {
-  awk -F ' ' '{print $3}' $LOCALHOSTRUN_URL_FILE | head -n 1
+  awk -F ' ' '{print $1}' $LOCALHOSTRUN_URL_FILE | head -n 1
 }
 
 # By default, files are opened in Microsoft Online Office
@@ -77,8 +77,7 @@ open_document() {
 }
 
 # Start a local server
-# Path relative from the Path value specified in the visum.desktop file
-python3 scripts/server.py $PORT &
+python3 /usr/share/visum/scripts/server.py $PORT &
 
 # Save server's port (used for performance optimization)
 echo "PORT=$PORT" > $PORT_FILE

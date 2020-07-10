@@ -20,15 +20,15 @@ do
 done
 
 echo -e "${GREEN}Dependencies satisfied.${ENDCOLOR_NORMAL}"
-
 sudo rm -rf /usr/share/visum
 
 sudo mkdir /usr/share/visum
-git clone https://github.com/VladimirMikulic/visum.git
 
-sudo cp -r ./visum/scripts /usr/share/visum
-sudo cp -r ./visum/media /usr/share/visum
-sudo cp ./visum/visum.desktop /usr/share/applications/visum.desktop
+install_dir="$(dirname "$0")"
+
+sudo cp -r "./$install_dir/scripts" /usr/share/visum
+sudo cp -r "./$install_dir/media" /usr/share/visum
+sudo cp "./$install_dir/visum.desktop" /usr/share/applications/visum.desktop
 
 rm -rf ~/.config/visum
 mkdir ~/.config/visum
