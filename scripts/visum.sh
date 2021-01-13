@@ -1,14 +1,43 @@
-if [ "$1" == "" ]; then
-  echo "No file path provided."
+print_error() {
+  >&2 echo $@
+}
+
+if [[ "$1" == ""  ]]; then
+  print_error "No file path provided."
+  exit 1
+fi
+if [ ! -f "$1" ]; then
+  print_error "$1: No such file or directory"
+  exit 1
+fi
+if [ ! -r "$1" ]; then
+  print_error "$1: Permission denied"
   exit 1
 fi
 
+is_office_file() {
+	file_format=`file $1 | rev | cut -d':' -f1 | rev`
+	supported_formats=( word excel composite microsoft powerpoint )
+
+	# verify file format is one of supported_formats
+	echo "${file_format,,}" | grep -qE "\b(`local IFS="|"; echo "${supported_formats[*]}"`)\b"
+	echo $?
+}
+
+FILEPATH=`realpath $1`
+if [ "$(is_office_file $FILEPATH)" == 1 ]; then
+	print_error "$1: Invalid file format"
+	exit 1
+fi
+
+# hide further errors
+exec 2>/dev/null
 
 PORT_FILE="/tmp/visum_port.txt"
 LOCALHOSTRUN_URL_FILE="/tmp/visum_localhostrun.txt"
 PUBLIC_IP=`curl icanhazip.com` # ~120ms delay, the fastest website.
 # Some filenames contain spaces and special characters which need to be encoded (%%x)
-URL_ENCODED_FILEPATH=`python3 -c "import urllib.parse; print(urllib.parse.quote('''$1'''))"`
+URL_ENCODED_FILEPATH=`python3 -c "import urllib.parse; print(urllib.parse.quote('''$FILEPATH'''))"`
 
 get_remote_server_url() {
   awk -F ' ' '{print $1}' $LOCALHOSTRUN_URL_FILE | head -n 1
