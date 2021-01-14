@@ -16,18 +16,18 @@ if [ ! -r "$1" ]; then
 fi
 
 is_office_file() {
-	file_format=`file $1 | rev | cut -d':' -f1 | rev`
-	supported_formats=( word excel composite microsoft powerpoint )
+  file_format=`file $1 | rev | cut -d':' -f1 | rev`
+  supported_formats=( word excel composite microsoft powerpoint )
 
-	# verify file format is one of supported_formats
-	echo "${file_format,,}" | grep -qE "\b(`local IFS="|"; echo "${supported_formats[*]}"`)\b"
-	echo $?
+  # verify file format is one of supported_formats
+  echo "${file_format,,}" | grep -qE "\b(`local IFS="|"; echo "${supported_formats[*]}"`)\b"
+  echo $?
 }
 
 FILEPATH=`realpath $1`
 if [ "$(is_office_file $FILEPATH)" == 1 ]; then
-	print_error "$1: Invalid file format"
-	exit 1
+  print_error "$1: Invalid file format"
+  exit 1
 fi
 
 # hide further errors
