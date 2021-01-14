@@ -96,7 +96,7 @@ You can use Visum in CLI by adding this code to your `~/.bashrc`/`~/.zshrc` file
 
 ```shell
 visum() {
-  bash /usr/share/visum/scripts/visum.sh $1 > /dev/null 2>&1
+  bash /usr/share/visum/scripts/visum.sh $1 > /dev/null
 }
 ```
 
