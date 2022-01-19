@@ -1,3 +1,7 @@
+# Ensure config file exists, without changing its modification time
+mkdir -p ~/.config/visum/
+>> ~/.config/visum/visum.conf
+
 if [ "$1" == "" ]; then
   echo "No file path provided."
   exit 1
