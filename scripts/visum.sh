@@ -14,42 +14,6 @@ get_remote_server_url() {
   awk -F ' ' '{print $1}' $LOCALHOSTRUN_URL_FILE | head -n 1
 }
 
-# By default, files are opened in Microsoft Online Office
-BASE_OFFICE_URL="http://view.officeapps.live.com/op/view.aspx?src="
-VISUM_PREFERRED_OFFICE=`awk -F '=' '/OFFICE/{print $2}' ~/.config/visum/visum.conf`
-
-if [ "$VISUM_PREFERRED_OFFICE" == "GOOGLE_OFFICE" ]; then
-  BASE_OFFICE_URL="https://docs.google.com/viewer?url="
-fi
-
-# Check if the config file exists
-if test -f "$PORT_FILE"; then
-  # Get port from config file
-  PORT=`awk -F '=' '/PORT/{print $2}' "$PORT_FILE"`
-
-  # Check if the conf data is valid
-  PY_SERVER_PID=`lsof -t -i:$PORT`
-  LOCALHOSTRUN_SSH_CONNECTION_PID=`ps aux | grep ssh | grep $PORT | awk -F " " '{print $2}'`
-
-  # If the python server is running AND localhost.run is forwarding port of the python server
-  if [ -n "$PY_SERVER_PID" ] && [ -n "$LOCALHOSTRUN_SSH_CONNECTION_PID" ]; then
-    REMOTE_SERVER_URL=`get_remote_server_url`
-    DOCUMENT_URL="$BASE_OFFICE_URL$REMOTE_SERVER_URL$URL_ENCODED_FILEPATH?key=$PUBLIC_IP"
-
-    x-www-browser $DOCUMENT_URL
-    exit
-  else
-    # If something went wrong, (either SSH connection dropped) OR/AND
-    # python server was shutdown (whatever the reason may be)
-    # We want to kill both processes (if any) and start them again (the rest of the script below)
-    kill -9 $PY_SERVER_PID
-    kill -9 $LOCALHOSTRUN_SSH_CONNECTION_PID
-  fi
-fi
-
-# Get a random available port
-PORT=`comm -23 <(seq 49152 65535 | sort) <(ss -Htan | awk '{print $4}' | cut -d':' -f2 | sort -u) | shuf | head -n 1`
-
 open_document() {
   # Url given to us by localhost.run
   REMOTE_SERVER_URL=`get_remote_server_url`
@@ -75,6 +39,39 @@ open_document() {
 
   $DEFAULT_BROWSER $DOCUMENT_URL
 }
+
+# By default, files are opened in Microsoft Online Office
+BASE_OFFICE_URL="http://view.officeapps.live.com/op/view.aspx?src="
+VISUM_PREFERRED_OFFICE=`awk -F '=' '/OFFICE/{print $2}' ~/.config/visum/visum.conf`
+
+if [ "$VISUM_PREFERRED_OFFICE" == "GOOGLE_OFFICE" ]; then
+  BASE_OFFICE_URL="https://docs.google.com/viewer?url="
+fi
+
+# Check if the config file exists
+if test -f "$PORT_FILE"; then
+  # Get port from config file
+  PORT=`awk -F '=' '/PORT/{print $2}' "$PORT_FILE"`
+
+  # Check if the conf data is valid
+  PY_SERVER_PID=`lsof -t -i:$PORT`
+  LOCALHOSTRUN_SSH_CONNECTION_PID=`ps aux | grep ssh | grep $PORT | awk -F " " '{print $2}'`
+
+  # If the python server is running AND localhost.run is forwarding port of the python server
+  if [ -n "$PY_SERVER_PID" ] && [ -n "$LOCALHOSTRUN_SSH_CONNECTION_PID" ]; then
+    open_document
+    exit
+  else
+    # If something went wrong, (either SSH connection dropped) OR/AND
+    # python server was shutdown (whatever the reason may be)
+    # We want to kill both processes (if any) and start them again (the rest of the script below)
+    kill -9 $PY_SERVER_PID
+    kill -9 $LOCALHOSTRUN_SSH_CONNECTION_PID
+  fi
+fi
+
+# Get a random available port
+PORT=`comm -23 <(seq 49152 65535 | sort) <(ss -Htan | awk '{print $4}' | cut -d':' -f2 | sort -u) | shuf | head -n 1`
 
 # Start a local server
 python3 /usr/share/visum/scripts/server.py $PORT &
